@@ -1,4 +1,4 @@
-package com.example.mynotes.di
+package com.example.mynotes.featurenote.presentation.di
 
 import android.app.Application
 import androidx.room.Room
@@ -17,11 +17,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+object TestAppModule {
     @Provides
     @Singleton
     fun provideNoteDatabase(app: Application): NoteDatabase {
-        return Room.databaseBuilder(app, NoteDatabase::class.java, NoteDatabase.DATABASE_NAME)
+        return Room.inMemoryDatabaseBuilder(app, NoteDatabase::class.java)
             .build()
     }
 
@@ -31,6 +31,7 @@ object AppModule {
     {
         return NoteRepositoryImpl(database.noteDao)
     }
+
     @Provides
     @Singleton
     fun provideDeleteNoteUseCase(repository: NoteRepository): DeleteNoteUseCase = DeleteNoteUseCase(repository)
@@ -46,5 +47,4 @@ object AppModule {
     @Provides
     @Singleton
     fun provideGetNoteUseCase(repository: NoteRepository): GetNoteUseCase = GetNoteUseCase(repository)
-
 }
